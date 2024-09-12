@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ReplicationController # the object type
+metadata:
+  name: kubia # replication controller name
+spec:
+  # The number of replicas can be changed to make horizontal upscaling/downscaling
+  replicas: 5 # the amount of pods' amount
+  # It's not needed to place the labels selector manually, Kubernetes can define it by itself using the labels from the template section
+  selector:
+  app: kubia # pods' selector telling what pods the replication controller is watching on
+  template: # the template used by replication controller to create new pods while working
+    metadata:
+      labels:
+        app: kubia
+        env: prod
+    spec:
+      containers:
+        - name: kubia
+          image: hex0xdead/kubia
+          ports:
+            - containerPort: 8080

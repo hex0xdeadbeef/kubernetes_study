@@ -1,0 +1,14 @@
+apiVersion: v1
+# To create an external name to the service representing the external service without writing out all the endpoints
+# we should create a service with the type "ExternalName"
+kind: Service
+metadata:
+  name: external-service-name
+spec:
+  # In this case the "type" field allows us to create a service representing the external name of the external service
+  type: ExternalName
+  # The full domain name of the real service
+  externalName: someapi.somecompany.com
+  # The ports of the service
+  ports:
+    - port: 80

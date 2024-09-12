@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: service-replication-controller
+spec:
+  replicas: 3
+  selector:
+    app: kubia
+  template:
+    metadata:
+      labels:
+        app: kubia
+    spec:
+      containers:
+        - name: kubia
+          image: hex0xdead/kubia
+          ports:
+            - containerPort: 8080
+          # readinessProbe is used to check whether the pod is ready to communicate.
+          # There can be the time to postpone the first check. After it the following checks will inform the service whether it can communicate with this pod.
+          # If it can't, the endpoint of this service will be excluded from the service's endpoints.
+          # After the check is passed, the pod will be added back.
+          readinessProbe:
+            exec:
+              command:
+                - ls
+                - /var/ready

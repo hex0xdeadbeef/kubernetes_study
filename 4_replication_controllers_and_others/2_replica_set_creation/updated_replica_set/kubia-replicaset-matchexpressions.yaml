@@ -1,0 +1,23 @@
+apiVersion: apps/v1 # k8s API version
+kind: ReplicaSet # the k8s object type
+metadata:
+  name: kubia # ReplicaSet name
+  namespace: default
+spec:
+  replicas: 3 # the number of simultaneous replicas at a moment
+  selector:
+    # Stronger labels selector
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - kubia
+  # the mold for new pods creation
+  template:
+    metadata:
+      labels:
+        app: kubia
+    spec:
+      containers:
+        - name: kubia
+          image: hex0xdead/kubia

@@ -1,0 +1,66 @@
+apiVersion: networking.k8s.io/v1
+
+# The type of object is Ingress
+kind: Ingress
+
+metadata:
+  # The name of Ingress
+  name: kubia-ingress
+
+spec:
+  # The TLS configuration
+  tls:
+    - hosts:
+        # The connections will be accepted at this hostname
+        - kubia.example.com
+      # The closed secret and certificate can be accepted from the Secret object created.
+      secretName: tls-secret
+
+  # rules is the slice of rules. We can place many domain names
+  rules:
+    - host: kubia.example.com # This ingress bind the domain name with our service
+      http:
+        # paths is the slice of some paths
+        # Different paths can be bound to the same service
+        paths:
+          - path: /kubia
+            pathType: Prefix
+            # All the requests will be directed to the 80th port of the service kubia-nodeport
+            backend:
+              service:
+                # The name of the service
+                name: kubia-nodeport
+                # The port of our service that is used to direct the requests to
+                port:
+                  number: 80
+          # Another path relatively to the same host
+          - path: /kubia-custom
+            pathType: Prefix
+            backend:
+              service:
+                name: kubia-nodeport-modified # different service relatively to the upper one
+                port:
+                  number: 80
+
+    # Some another hosts added
+    - host: foo.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: foo
+                port:
+                  number: 80
+
+    - host: bar.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bar
+                port:
+                  number: 80

@@ -1,0 +1,25 @@
+apiVersion: v1
+# the Service type
+kind: Service
+metadata:
+  name: kubia-load-balancer
+spec:
+  # LoadBalancer type specified
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+
+  # If the conn is opened by using node's port and this node doesn't include the pod representing the service, the network "hop" is needed. To supress it we use
+  # the externalTrafficPolicy. # If the definition of the service includes this parameter and the conn is opened by using node's port, the proxy will pick a local working pod up.
+
+  # In the case when there's no local pods, the conn will hang out (it won't be directed to a random global pod). From this point we need to provide the
+  # load-balancing system with redirection only to nodes that have at least one working pod.
+
+  # Always connections are distributed evenly throughout the pods, but while using the externalTrafficPolicy they're not.
+  externalTrafficPolicy: Local
+
+  # the selector to select nodes match the labels
+  selector:
+    app: kubia

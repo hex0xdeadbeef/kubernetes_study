@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-nodeport
+spec:
+  type: NodePort # NodePort forces k8s to open the specific port in all the working nodes
+  ports:
+    - port: 80 # the port of the internal IP of the service
+      targetPort: 8080 # the port of the pods
+      nodePort: 30123 # The service will be available on the 30123th port
+  # the selector will be used to find out the pods that consist of the apps needed
+  selector:
+    app: kubia

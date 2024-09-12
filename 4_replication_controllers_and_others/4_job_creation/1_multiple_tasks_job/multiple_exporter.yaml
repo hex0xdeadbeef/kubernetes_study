@@ -1,0 +1,24 @@
+# the k8s api version
+apiVersion: batch/v1
+# the kind of k8s object
+kind: Job
+metadata:
+  name: batching-job
+spec:
+  # without the parallelism flag the task will be perfomed for N times sequentially
+  completions: 30
+  # with the flag parallelism the M tasks can be performed simultaneously
+  parallelism: 10
+  # the template of the pods
+  template:
+    metadata:
+      # the labels will be used to create a label matcher
+      labels:
+        app: batch-pod
+    spec:
+      # restartPolicy tells k8s what to do if a specific job failed
+      restartPolicy: OnFailure
+      # a container specification to create a new pod
+      containers:
+        - name: main
+          image: luksa/batch-job

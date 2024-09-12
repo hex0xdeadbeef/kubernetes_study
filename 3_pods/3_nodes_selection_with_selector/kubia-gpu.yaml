@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubia-gpu
+spec:
+  nodeSelector: # nodeSelector points to the pods to select only nodes having the label "gpu" set to "true"
+    gpu: "true"
+  containers:
+  - image: hex0xdead/kubia
+    name: kubia

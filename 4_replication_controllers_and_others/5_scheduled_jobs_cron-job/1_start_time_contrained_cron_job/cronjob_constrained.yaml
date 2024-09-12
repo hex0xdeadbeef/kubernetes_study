@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+
+kind: CronJob
+
+metadata:
+  name: cron-job-constrained
+
+spec:
+  # the cron job time format
+  # 50 minutes | hours are missed | days are missed | months are missed | days of a week is missed |
+  schedule: "50 * * * *"
+  # startingDeadlineSeconds constrains the time can be consumed to start a Job
+  startingDeadlineSeconds: 15
+
+  # Job object specification
+  jobTemplate:
+    metadata:
+      name: cron-job-constrained-job
+    spec:
+      template:
+        metadata:
+          labels:
+            app: batcher
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: main
+              image: luksa/batch-job

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-service # the name of the service
+spec:
+  # There's no label selector
+  ports:
+    - name: main # The name of the port to connect with
+      port: 80 # The port of the service

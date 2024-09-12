@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-manual-load-balancer
+spec:
+  selector:
+    app: kubia # selector for pods search by label
+  ports:
+  - port: 32768 # external port (is available from out)
+    targetPort: 8080 # the port that is inside of container
+  type: LoadBalancer

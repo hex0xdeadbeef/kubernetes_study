@@ -1,0 +1,21 @@
+# the apiVersion
+apiVersion: batch/v1
+# the type of a k8s obj
+kind: Job
+metadata:
+  name: batch-job
+spec:
+  # the template of the job pod to be used on failure of the pod work
+  template:
+    metadata:
+      # the set of labels will be used by a Job object to observe all the pods
+      # the labels will be used to create pods selector
+      labels:
+        app: batch-job
+    spec:
+      # the restart policy is used in a restart of the pod died
+      restartPolicy: OnFailure
+      # the definition of a container that will be created based on this specificatione
+      containers:
+      - name: main
+        image: luksa/batch-job

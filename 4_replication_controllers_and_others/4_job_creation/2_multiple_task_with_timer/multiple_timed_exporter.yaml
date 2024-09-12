@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: custom-butcher-v1
+spec:
+  # activeDeadlineSeconds forces a pod to work the specific period of time
+  # if the task failed it marks it as failed
+  activeDeadlineSeconds: 120
+  # backoffLimit forces the task to be marked only after N tries to complete # the task
+  backoffLimit: 1
+  completions: 5
+  parallelism: 3
+  template:
+    metadata:
+      labels:
+        app: custom-batcher
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: main
+          image: luksa/batch-job

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-service
+spec:
+  # sessionAffinity forces the service to direct the requests from the same client to the same pod
+  sessionAffinity: ClientIP
+  ports:
+    # The port will be used to accept the connections and route them to the 8080th port
+    # We can write out a plenty of ports to be used. In this case we need to name every new port.
+    - name: http
+      port: 80 # The port of the service
+      targetPort: 8080 # The port of the pod
+    - name: https
+      port: 443 # The port of the service
+      targetPort: 8443 # The port of the pod
+
+  # The label selector to be used to define the pods that match the selector
+  selector:
+    app: kubia

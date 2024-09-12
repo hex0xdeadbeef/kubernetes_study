@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+# the type of an k8s object
+kind: DaemonSet
+metadata:
+  # name of the DaemonSet object
+  name: ssd-monitor
+# The specification of the DaemonSelector
+spec:
+  # node selector
+  selector:
+    # the DaemonSet will observe the nodes with the label "app: ssd-monitor" and restore the pods if theirs nodes get died and restored afterall
+    matchLabels:
+      app: ssd-monitor
+
+  # the template that will be used to create pod when a node will be destroyed and restarted
+  template:
+    metadata:
+      labels:
+        app: ssd-monitor
+    spec:
+      # the pods will be placed on the nodes that has the label: "disk: ssd"
+      nodeSelector:
+        disk: ssd
+      containers:
+        - name: main
+          image: luksa/ssd-monitor

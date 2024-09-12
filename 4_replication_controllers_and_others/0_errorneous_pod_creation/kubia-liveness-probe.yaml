@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubia-liveness
+spec:
+  containers:
+  - image: luksa/kubia-unhealthy # errorneous application
+    name: kubia
+    livenessProbe: # liveness probe algorithm specification
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 15 # the delay before which the checks start
